@@ -1,6 +1,6 @@
 import time
 
-from config import IS_RASPBERRY_PI, CAMERA_PORT, RESOLUTION_H, RESOLUTION_W
+from config import IS_RASPBERRY_PI, CAMERA_PORT, RESOLUTION_H, RESOLUTION_W 
 
 
 # noinspection PyPep8Naming
@@ -55,7 +55,7 @@ class Camera:
 
 
 if __name__ == '__main__':
-
+    
     # Stream Video
     camera = Camera()
     camera.start_capture()

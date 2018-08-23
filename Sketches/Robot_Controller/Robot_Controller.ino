@@ -24,7 +24,7 @@ int pos = 90 ;
 int demo_dly = 5000 ;
 int speedLimit = 150 ;
 
-int pivotLimit = 300 ;
+int pivotLimit = 400 ;
 int proximityLimit = 30; // stops at <proximityLimit> cms from obstacle in front 
 
 void setup() {
@@ -45,8 +45,8 @@ void setup() {
 
   stop_wheels() ;
 
-  // start serial port at 9600 bps:
-  Serial.begin(9600);
+  // start serial port at 115200 bps:
+  Serial.begin(115200);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
     digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
@@ -184,9 +184,12 @@ void find_way() {
 void proximity_check() {
 
   unsigned int uS = sonar.ping_cm();
-  delay(50);
-  Serial.print(uS); 
-  delay(50);
+  delay(100);
+  int rnd = random(100);
+  if( rnd % 80 == 0 ){
+    Serial.println(uS); 
+    delay(50);
+  }
   if (uS < proximityLimit && wheels_status == "FORWARD" ) {
     stop_wheels();
     Serial.println("Obstacle:STOP!");

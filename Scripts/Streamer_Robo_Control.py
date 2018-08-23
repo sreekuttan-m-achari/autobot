@@ -9,6 +9,8 @@ from config import config_data
 
 cnf_dat = config_data()
 
+img_quality = cnf_dat["img_quality"]
+
 print("Enabling Stream Connection...")
 
 context = zmq.Context()
@@ -19,13 +21,15 @@ print("Stream Connection Enabled..!")
 
 print("Enabling Serial Connection...")
 
-ser = serial.Serial(cnf_dat["serial_port"], 9600)  # change ACM number as found from ls /dev/ttyUSB*
-ser.baudrate = 9600
+ser = serial.Serial(cnf_dat["serial_port"], cnf_dat["baudrate"])  # change ACM number as found from ls /dev/ttyUSB*
+ser.baudrate = cnf_dat["baudrate"]
 
 ser.write("PING")
 
 
 def get_serial_data():
+    # if (1):
+    #     return "None"
     read_ser = ser.readline()
     if (read_ser):
         return read_ser
@@ -43,31 +47,49 @@ print("Enabling Camera...")
 camera = Camera()
 camera.start_capture()
 
-print("Enabled Camera!")
+print("Enabled Camera..!")
+
+print("Waiting for Control Initialization..!")
+
+msg = stream_socket.recv()
+print msg
+
+print("Control Initialized..!")
 
 print("Starting Stream to " + cnf_dat["controler_ip"] + ':' + cnf_dat["stream_port"])
 
 while True:
 
     try:
-        # srl_data = get_serial_data()
 
-        # if(srl_data):
-        #     print("Serial Data : " +srl_data )
+        frame = camera.current_frame.read()  # grab the current frame
 
-        frame = camera.current_frame.read()  # grab the current frame 
+        encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), img_quality]
+
 
         encoded, buffer = cv2.imencode('.jpg', frame)
         jpg_as_text = base64.b64encode(buffer)
 
-        combained = jpg_as_text + "$$MSG$$" + srl_data
+        srl_data = get_serial_data()
 
-        stream_socket.send(combained)
+        #if (srl_data):
+        # print("Serial Data : " + srl_data)
 
-        command = stream_socket.recv_string()
-        print("Command : " + command)
-        ser.write(command)
+        combined = jpg_as_text + "$$MSG$$" + srl_data
+
+        stream_socket.send(combined)
+
 
     except KeyboardInterrupt:
-        camera.release()
         break
+
+    command = stream_socket.recv()
+
+    if (command):
+        print("Command : " + command)
+        if (command == "QUIT"):
+            break
+        ser.write(command)
+
+print("Exited : ")
+quit()
