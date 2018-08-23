@@ -1,6 +1,9 @@
 # autobot
 AI powered Autonomous Robot with OpenCV , Python , C &amp; TensorFlow
 
+Hardware Components : Raspberry Pi Zero W , Arduino Nano 
+
+
 Full Description
 
 https://embedded-hackers.blogspot.com/2018/08/autobot-making-of-ai-powered-autonomous.html
