@@ -1,5 +1,5 @@
 # autobot
-AI powered Autonomous Robot with OpenCV , Python , C &amp; TensorFlow
+AI powered Autonomous Robot with OpenCV , Python , C , ØMQ &amp; TensorFlow
 
 Hardware Components : Raspberry Pi Zero W , Arduino Nano 
 
@@ -23,3 +23,7 @@ https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_setup/py_intro/py_intro.htm
 TensorFlow 
 
 https://www.tensorflow.org/api_docs/python/
+
+ØMQ
+
+http://zeromq.org/
